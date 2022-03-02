@@ -1,14 +1,17 @@
-import PetItem from './PetItem';
-import {useState} from 'react';
-
+import PetItem from "./PetItem";
+import { useState } from "react";
+import SearchBar from './SearchBar'
+import Selector from './Selector'
 
 export default function PetsList(props) {
-  const pets = props.pets.map((pet) => <PetItem key={pet.id} pet={pet} />);
-  const [query, setQuery] = useState("")
-  props.filter(query === props)
-  const petQuery = () => {
-    setQuery()
-  }
+  const [query, setQuery] = useState("");
+  const [type, setType] = useState("");
+
+  const pets = props.pets
+    .filter((pet) => pet.name.toLowerCase().includes(query))
+    .filter((pet) => pet.type.includes(type))
+    .map((pet) => <PetItem key={pet.id} pet={pet} />);
+
   return (
     <section id="doctors" className="doctor-section pt-140">
       <div className="container">
@@ -18,26 +21,10 @@ export default function PetsList(props) {
               <h1 className="mb-25 wow fadeInUp" data-wow-delay=".2s">
                 Fur-ends
               </h1>
-              <div className="input-group rounded">
-                <input
-                  type="search"
-                  className="form-control rounded"
-                  placeholder="Search"
-                  aria-label="Search"
-                  aria-describedby="search-addon"
-                  onChange={petQuery}
-                />
-              </div>
+              <SearchBar setQuery={setQuery}/>
               <br />
               Type:
-              <select className="form-select">
-                <option value="" selected>
-                  All
-                </option>
-                <option value="Cat">Cat</option>
-                <option value="Dog">Dog</option>
-                <option value="Rabbit">Rabbit</option>
-              </select>
+              <Selector setType={setType} />
             </div>
           </div>
         </div>
